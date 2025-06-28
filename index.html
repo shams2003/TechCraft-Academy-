@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechCraft Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for spinner animation */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Custom styles for modal transitions (no Framer Motion in plain JS) */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        /* Ensure font-inter is used globally for better aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animation for the new tagline (slide in from top) */
+        @keyframes slideInFromTop {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-slide-in-from-top {
+            animation: slideInFromTop 0.8s ease-out forwards;
+        }
+
+        /* Animation for Hero Section H2 (fade in and slide up) */
+        @keyframes fadeInSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-hero-h2 {
+            animation: fadeInSlideUp 0.8s ease-out forwards;
+        }
+
+        /* Animation for Hero Section P (fade in and slide up with delay) */
+        @keyframes fadeInSlideUpDelayed {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-hero-p {
+            animation: fadeInSlideUpDelayed 0.8s ease-out forwards;
+            animation-delay: 0.3s; /* Add a delay for the paragraph */
+        }
+
+        /* --- Background Motion Styles --- */
+        /* Hero section background setup for pseudo-element */
+        .hero-section-with-motion {
+            position: relative;
+            overflow: hidden; /* Ensures pseudo-element doesn't spill out */
+            background-image: url('image_aa91dd.jpg'); /* Moved image here from inline style */
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .hero-section-with-motion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%; /* Make it larger to allow movement */
+            height: 150%;
+            /* Radial gradient for a glowing orb effect */
+            background: radial-gradient(circle at 10% 10%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 90%, rgba(0, 191, 255, 0.3) 0%, transparent 50%);
+            mix-blend-mode: screen; /* Blends nicely with dark background */
+            animation: moveGradient 20s linear infinite alternate; /* Adjust speed as desired */
+            z-index: 1; /* Ensure it's above the image but below text */
+        }
+
+        /* Team section background motion */
+        .team-section-with-motion {
+            position: relative;
+            overflow: hidden;
+            perspective: 1500px; /* Crucial for 3D transforms within this section */
+        }
+
+        .team-section-with-motion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 250%; /* Made larger for more noticeable movement */
+            height: 250%; /* Made larger for more noticeable movement */
+            background: radial-gradient(circle at 70% 30%, rgba(100, 255, 218, 0.25) 0%, transparent 60%), /* Slightly more opaque */
+                        radial-gradient(circle at 30% 70%, rgba(138, 43, 226, 0.25) 0%, transparent 60%); /* Slightly more opaque */
+            mix-blend-mode: screen;
+            animation: moveGradientTeam 30s linear infinite alternate; /* Adjusted speed and duration */
+            z-index: 1;
+        }
+
+        /* Ensure text is above the pseudo-element */
+        .hero-section-with-motion > *, .team-section-with-motion > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes moveGradient {
+            0% {
+                transform: translate(-10%, -10%) rotate(0deg);
+            }
+            100% {
+                transform: translate(10%, 10%) rotate(360deg);
+            }
+        }
+
+        @keyframes moveGradientTeam {
+            0% {
+                transform: translate(-70%, -70%) rotate(0deg); /* More initial translation for wider movement */
+            }
+            100% {
+                transform: translate(20%, 20%) rotate(360deg); /* More final translation for wider movement */
+            }
+        }
+        /* --- End Background Motion Styles --- */
+
+        /* Navbar specific styles for responsiveness and appearance */
+        .navbar-shadow {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+        }
+        .menu-hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        .menu-visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- Featured Courses Image & Box Sizing --- */
+        .course-image-container {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2d3748;
+        }
+
+        .course-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Team Section Image Sizing and 3D Motion */
+        .main-team-member-container {
+            width: 250px; /* Adjust size of the square container */
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Ensures image doesn't spill outside its container */
+            border-radius: 12px; /* Slightly rounded corners for the square background */
+            background-color: #1c1c30; /* A darker shade for the background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            transform-style: preserve-3d; /* Allows 3D transforms */
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .main-team-member-container:hover {
+            transform: translateY(-15px) rotateY(10deg) translateZ(40px) scale(1.05); /* Increased movement, 3D rotation, pop out */
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.2); /* More vibrant shadow for pop */
+        }
+
+        .main-team-img {
+            width: 180px; /* Size of the round image within the square */
+            height: 180px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%; /* Make the image round */
+            border: 4px solid #8B5CF6; /* Purple border for the round image */
+        }
+
+        .small-team-img {
+            width: 120px; /* Increased size for the bottom images */
+            height: 120px; /* Increased size for the bottom images */
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        /* Larger card size for team members with 3D motion */
+        .team-member-card {
+            padding: 1.75rem; /* Increased padding */
+            background-color: #1a1a2e; /* Slightly darker background for contrast */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Stronger initial shadow */
+            transform-style: preserve-3d; /* Essential for 3D transforms on children/self */
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother cubic-bezier transition */
+        }
+
+        .team-member-card:hover {
+            transform: translateY(-10px) rotateY(8deg) translateZ(30px) scale(1.02); /* Lift, rotate, pop out, slightly scale */
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.2); /* More prominent shadow with a slight teal glow */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-black via-[#0D0C1D] to-[#1A1A2E] text-white min-h-screen font-inter antialiased">
+
+    <nav class="sticky top-0 z-50 bg-black bg-opacity-30 backdrop-blur-md border-b border-gray-700 p-4 flex justify-between items-center navbar-shadow rounded-b-xl">
+        <div class="flex items-center">
+            <span class="text-xl font-bold text-white">TechCraft Academy</span>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="#hero-section" class="text-gray-300 hover:text-white transition duration-300 ease-in-out font-medium">Home</a>
+            <a href="#courses-grid" class="text-gray-300 hover:text-white transition duration-300 ease-in-out font-medium">Courses</a>
+            <a href="#team-section" class="text-gray-300 hover:text-white transition duration-300 ease-in-out font-medium">Team</a>
+            <a href="#why-choose-us-section" class="text-gray-300 hover:text-white transition duration-300 ease-in-out font-medium">Why Us</a>
+            <a href="#contact-section" class="text-gray-300 hover:text-white transition duration-300 ease-in-out font-medium">Contact</a>
+            <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
+                Sign In
+            </button>
+        </div>
+
+        <div class="md:hidden">
+            <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="md:hidden absolute top-16 left-0 w-full bg-black bg-opacity-90 backdrop-blur-md p-6 menu-hidden flex flex-col items-center space-y-6 rounded-b-xl shadow-lg z-40">
+        <a href="#hero-section" class="text-gray-300 hover:text-white text-lg font-medium w-full text-center py-2" onclick="toggleMobileMenu()">Home</a>
+        <a href="#courses-grid" class="text-gray-300 hover:text-white text-lg font-medium w-full text-center py-2" onclick="toggleMobileMenu()">Courses</a>
+        <a href="#team-section" class="text-gray-300 hover:text-white text-lg font-medium w-full text-center py-2" onclick="toggleMobileMenu()">Team</a>
+        <a href="#why-choose-us-section" class="text-gray-300 hover:text-white text-lg font-medium w-full text-center py-2" onclick="toggleMobileMenu()">Why Us</a>
+        <a href="#contact-section" class="text-gray-300 hover:text-white text-lg font-medium w-full text-center py-2" onclick="toggleMobileMenu()">Contact</a>
+        <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out w-full mt-4">
+            Sign In
+        </button>
+    </div>
+
+
+    <section id="hero-section" class="text-center px-4 py-20 rounded-b-3xl shadow-xl hero-section-with-motion">
+        <h2 class="text-4xl md:text-6xl font-bold mb-6 text-white opacity-0 transform -translate-y-5 animate-hero-h2">
+            Master the Future of Technology
+        </h2>
+        <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-xl mx-auto opacity-0 transform translate-y-5 animate-hero-p">
+            Master AI skills through expert-led online courses tailored for real-world success.
+        </p>
+        <div class="inline-block transform transition duration-300 ease-in-out hover:scale-105">
+            <button id="enroll-now-btn" class="bg-blue-600 hover:bg-blue-700 px-8 py-4 text-lg rounded-xl shadow-xl font-bold transition duration-300 ease-in-out transform hover:scale-105">
+                Enroll Now
+            </button>
+        </div>
+    </section>
+
+    <section class="px-6 py-16">
+        <h3 class="text-3xl font-semibold text-center mb-12 text-purple-300">Featured Courses</h3>
+        <div id="courses-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            </div>
+    </section>
+
+
+
+    <section id="team-section" class="px-6 py-16 bg-gradient-to-r from-[#0d0c1d] to-[#1a1a2e] rounded-b-3xl shadow-xl team-section-with-motion flex flex-col items-center">
+        <h3 class="text-3xl font-semibold text-center mb-12 text-purple-300">Our Expert Team</h3>
+        
+        <div class="main-team-member-container mb-12">
+            <img src="./b430124c-1da3-492d-a675-1a6d4afe4ba9.jpg" alt="Lead Expert" class="main-team-img">
+        </div>
+        <h4 class="font-bold text-2xl text-white mb-1">MD SHAMS AL SIAM</h4>
+        <p class="text-gray-400 text-base mb-12">CEO & Founder</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-5xl mx-auto"> <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
+                <img src="./ - Sonamukhi Falguni15.jpg" alt="Team Member 1" class="small-team-img rounded-full mb-4 border-2 border-blue-500">
+                <h4 class="font-bold text-xl text-white mb-1">Sumiya Akter Sonali </h4>
+                <p class="text-gray-400 text-md">Manager</p>
+            </div>
+            <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
+                <img src="./Afrin Akther.jpg" alt="Team Member 2" class="small-team-img rounded-full mb-4 border-2 border-orange-500">
+                <h4 class="font-bold text-xl text-white mb-1">Most Afrin Akther </h4>
+                <p class="text-gray-400 text-md">Team Leader</p>
+            </div>
+            <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
+                <img src="./Screenshot 2025-06-28 171230 - abdullha al saud.png" alt="Team Member 3" class="small-team-img rounded-full mb-4 border-2 border-teal-500">
+                <h4 class="font-bold text-xl text-white mb-1">Abdullha Al Saud</h4>
+                <p class="text-gray-400 text-md">Digital Marketer & SMM</p>
+            </div>
+            <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
+                <img src="./5th.jpg" alt="Team Member 4" class="small-team-img rounded-full mb-4 border-2 border-red-500">
+                <h4 class="font-bold text-xl text-white mb-1">Mst.Rupsana Akter </h4>
+                <p class="text-gray-400 text-md">Senior Sales Executive</p>
+            </div>
+            <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
+                <img src="./Orthi.png" alt="Team Member 5" class="small-team-img rounded-full mb-4 border-2 border-yellow-500">
+                <h4 class="font-bold text-xl text-white mb-1">Nabila jannat orthi </h4>
+                <p class="text-gray-400 text-md">Client Relationship Officer</p>
+            </div>
+            <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
+                <img src="./Mst Maysha.jpg" alt="Team Member 6" class="small-team-img rounded-full mb-4 border-2 border-sky-500">
+                <h4 class="font-bold text-xl text-white mb-1">Mst Maysha </h4>
+                <p class="text-gray-400 text-md">Tele Sales Representative </p>
+            </div>
+        </div>
+    </section>
+
+ 
+
+    <section id="why-choose-us-section" class="px-6 py-16 bg-gradient-to-r from-[#0d0c1d] to-[#1a1a2e] rounded-b-3xl shadow-xl">
+        <h3 class="text-3xl font-semibold text-center mb-12 text-purple-300">Why Choose Us</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-6xl mx-auto">
+            <div class="p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-blue-400">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <h4 class="font-semibold text-lg text-white mb-2">Expert Mentors</h4>
+                <p class="text-sm text-gray-400">Get real guidance from professionals and build job-ready skills.</p>
+            </div>
+            <div class="p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-blue-400">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <h4 class="font-semibold text-lg text-white mb-2">Hands-On Projects</h4>
+                <p class="text-sm text-gray-400">Get real guidance from professionals and build job-ready skills.</p>
+            </div>
+            <div class="p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-blue-400">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <h4 class="font-semibold text-lg text-white mb-2">Flexible Learning</h4>
+                <p class="text-sm text-gray-400">Get real guidance from professionals and build job-ready skills.</p>
+            </div>
+            <div class="p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-blue-400">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <h4 class="font-semibold text-lg text-white mb-2">Career Support</h4>
+                <p class="text-sm text-gray-400">Get real guidance from professionals and build job-ready skills.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 py-16">
+        <h3 class="text-3xl font-semibold text-center mb-12 text-purple-300">What Students Say</h3>
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-center flex-wrap">
+            <div class="bg-gray-800 bg-opacity-70 backdrop-blur-md border border-gray-700 p-6 w-full sm:w-80 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+                <div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-xl">
+                            A
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg text-white">Ammar sabbir</h4>
+                            <p class="text-sm text-gray-400">First Batch</p>
+                            <p class="text-sm text-gray-400">ammarsabbir1@gmail.com</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-300">"Alhamdulillah onk sundor onk kichu sikhtechi in future kaje lagbe onek”</p>
+                </div>
+            </div>
+            <div class="bg-gray-800 bg-opacity-70 backdrop-blur-md border border-gray-700 p-6 w-full sm:w-80 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+                <div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-xl">
+                            B
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg text-white">Moazzem Hossain Abu</h4>
+                            <p class="text-sm text-gray-400">First Batch</p>
+                            <p class="text-sm text-gray-400">phoenixmtb4@gmail.com</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-300">“alhamdulliah pretty good. Alhamdulillah, can’t complain – all is good”</p>
+                </div>
+            </div>
+            <div class="bg-gray-800 bg-opacity-70 backdrop-blur-md border border-gray-700 p-6 w-full sm:w-80 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+                <div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-xl">
+                            C
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg text-white">Md Helal</h4>
+                            <p class="text-sm text-gray-400">First Batch</p>
+                            <p class="text-sm text-gray-400">mstsoniya526k@gmail.com </p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-300">“Excellent curriculum and supportive mentors. TechCraft Academy is a game-changer for AI education.!”</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 py-16 bg-gradient-to-br from-[#0D0C1D] to-[#1A1A2E] text-center rounded-xl shadow-xl my-16">
+        <h3 class="text-3xl md:text-4xl font-bold mb-6 text-orange-400">Deep Dive into AI Research</h3>
+        <p class="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
+            For those passionate about pushing the boundaries of Artificial Intelligence, our advanced research programs offer a unique opportunity to explore cutting-edge topics, contribute to groundbreaking projects, and collaborate with leading AI scientists. Elevate your expertise and make your mark in the future of AI.
+        </p>
+        <button id="explore-research-btn" class="bg-orange-600 hover:bg-orange-700 px-8 py-4 text-lg rounded-xl shadow-xl font-bold transition duration-300 ease-in-out transform hover:scale-105">
+            Explore Research Programs
+        </button>
+    </section>
+
+    <section id="contact-section" class="px-6 py-16 bg-gradient-to-r from-[#0d0c1d] to-[#1a1a2e] rounded-b-3xl shadow-xl">
+        <h3 class="text-3xl font-semibold text-center mb-12 text-purple-300">Contact Us</h3>
+        <div class="max-w-xl mx-auto bg-gray-800 bg-opacity-70 backdrop-blur-md border border-gray-700 rounded-2xl p-8 shadow-lg">
+            <p class="text-lg text-gray-300 mb-8 text-center">Have questions or need assistance? Reach out to us directly via WhatsApp!</p>
+            <form id="contact-form" class="space-y-6">
+                <div>
+                    <label for="contact-name" class="block text-sm font-medium text-gray-300 mb-2">Name</label>
+                    <input type="text" id="contact-name" name="name" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500 focus:border-purple-500" placeholder="Your Name" required>
+                </div>
+                <div>
+                    <label for="contact-email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                    <input type="email" id="contact-email" name="email" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500 focus:border-purple-500" placeholder="your@example.com" required>
+                </div>
+                <div>
+                    <label for="contact-message" class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                    <textarea id="contact-message" name="message" rows="5" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500 focus:border-purple-500" placeholder="Your message..." required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                    Send Message via WhatsApp
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="text-center text-sm text-gray-400 py-6 border-t border-gray-700 rounded-t-xl">
+        © 2025 TechCraft Academy. All rights reserved.
+    </footer>
+
+    <div id="course-description-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 hidden modal-exit">
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-lg w-full shadow-2xl relative">
+            <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-white transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+            </button>
+            <h3 id="modal-course-title" class="text-2xl font-bold mb-4 text-purple-300"></h3>
+            <div id="modal-content-area">
+                <div id="modal-loading-spinner" class="flex items-center justify-center py-8 hidden">
+                    <svg class="animate-spin h-8 w-8 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="ml-3 text-lg text-gray-300">Generating...</span>
+                </div>
+                <p id="modal-description" class="text-gray-300 leading-relaxed"></p>
+                <p id="modal-error" class="text-red-400 text-center py-4 hidden"></p>
+            </div>
+            <div class="mt-6 text-right">
+                <button id="modal-close-btn-bottom" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-300 ease-in-out">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="alert-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 hidden modal-exit">
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-sm w-full shadow-2xl relative text-center">
+            <button id="close-alert-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-white transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+            </button>
+            <h3 id="alert-modal-title" class="text-xl font-bold mb-4 text-purple-300">Notification</h3>
+            <p id="alert-modal-message" class="text-gray-300 leading-relaxed mb-6"></p>
+            <button id="alert-modal-ok-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-300 ease-in-out">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase imports (Placeholder - will not work without proper Firebase config)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Initialization (This block will only fully function with your actual Firebase project configuration)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+
+        let app;
+        let db;
+        let auth;
+        let userId = 'anonymous'; // Default to anonymous
+
+        if (Object.keys(firebaseConfig).length > 0) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    console.log("Firebase: User signed in, UID:", userId);
+                } else {
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined') {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                            userId = auth.currentUser.uid;
+                            console.log("Firebase: Signed in with custom token, UID:", userId);
+                        } else {
+                            await signInAnonymously(auth);
+                            userId = auth.currentUser.uid;
+                            console.warn("Firebase: Signed in anonymously, UID:", userId);
+                        }
+                    } catch (error) {
+                        console.error("Firebase: Authentication failed:", error);
+                        userId = crypto.randomUUID();
+                        console.warn("Firebase: Falling back to random UUID for user ID due to auth failure.");
+                    }
+                }
+            });
+        } else {
+            console.warn("Firebase config not available. Running in a non-persistent mode. No database operations will occur.");
+            userId = crypto.randomUUID();
+        }
+
+        // --- Configuration Constants ---
+        const WHATSAPP_NUMBER = "8801797654164"; // Updated WhatsApp Number
+        const RESEARCH_PROGRAM_LINK = "https://www.example.com/ai-research"; // Placeholder for research program link
+
+
+        // --- Course Data ---
+        const coursesData = [
+        {
+                title: "ChatGPT & AI Week",
+                shortDesc: "AI নিয়ে এখনো পুরোটা ক্লিয়ার না? ChatGPT আছে, কিন্তু পড়াশোনায়",
+                level: "All Levels",
+                price: "BDT 50",
+                imageUrl: "./492653536_122100483086851876_7672025409578758590_n.jpg" // Image path for 1024x1024 (hypothetical)
+            },
+            {
+                title: "Basics of cyber security",
+                shortDesc: "Learn the core concepts of data science, including data analysis, visualization, and basic machine learning.",
+                level: "Beginner",
+                price: "BDT 500",
+                imageUrl: "./unnamed (1).png" // Image path for 1024x1024 (hypothetical)
+            },
+            {
+                title: "Basics of Computer",
+                shortDesc: "Dive deep into machine learning algorithms and implement them using Python and popular libraries.",
+                level: "Intermediate",
+                price: "BDT 4000",
+                imageUrl: "./computer.png" // Image path for 1024x1024 (hypothetical)
+            },
+            
+        ];
+
+        // --- DOM Elements ---
+        const courseDescriptionModal = document.getElementById('course-description-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalCloseBtnBottom = document.getElementById('modal-close-btn-bottom');
+        const modalCourseTitle = document.getElementById('modal-course-title');
+        const modalDescription = document.getElementById('modal-description');
+        const modalLoadingSpinner = document.getElementById('modal-loading-spinner');
+        const modalError = document.getElementById('modal-error');
+        const coursesGrid = document.getElementById('courses-grid'); // Get the courses grid container
+
+        const alertModal = document.getElementById('alert-modal');
+        const closeAlertModalBtn = document.getElementById('close-alert-modal-btn');
+        const alertModalTitle = document.getElementById('alert-modal-title');
+        const alertModalMessage = document.getElementById('alert-modal-message');
+        const alertModalOkBtn = document.getElementById('alert-modal-ok-btn');
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const enrollNowHeroBtn = document.getElementById('enroll-now-btn');
+        const exploreResearchBtn = document.getElementById('explore-research-btn');
+        const contactForm = document.getElementById('contact-form');
+
+
+        // --- Utility Functions ---
+
+        // Helper to show custom alert modal
+        function showAlert(title, message) {
+            alertModalTitle.textContent = title;
+            alertModalMessage.textContent = message;
+            alertModal.classList.remove('hidden', 'modal-exit');
+            alertModal.classList.add('modal-enter');
+            setTimeout(() => alertModal.classList.add('modal-enter-active'), 10);
+        }
+
+        // Helper to hide custom alert modal
+        function hideAlert() {
+            alertModal.classList.remove('modal-enter-active');
+            alertModal.classList.add('modal-exit');
+            setTimeout(() => alertModal.classList.add('hidden'), 300); // Hide after transition
+        }
+
+        // Toggle mobile menu visibility
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('menu-hidden');
+            mobileMenu.classList.toggle('menu-visible');
+        }
+
+        // --- Core Functions ---
+
+        // Handles enrollment, records to Firestore (if configured), and redirects to Facebook
+        async function handleEnrollClick(courseDetails = null) {
+            console.log("Enroll button clicked!");
+
+            if (db && userId && userId !== 'anonymous') {
+                try {
+                    showAlert("Enrollment", "Enrolling you in the course...");
+                    const enrollmentsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/enrollments`);
+                    await addDoc(enrollmentsCollectionRef, {
+                        itemType: courseDetails ? 'course' : 'general_enroll',
+                        itemName: courseDetails ? courseDetails.title : 'General Enrollment',
+                        itemPrice: courseDetails ? courseDetails.price : 'N/A',
+                        enrollmentDate: serverTimestamp(),
+                        userId: userId
+                    });
+                    showAlert("Enrollment Success!", "You have been successfully enrolled. Redirecting to Facebook...");
+                } catch (error) {
+                    console.error("Error saving enrollment to Firestore:", error);
+                    showAlert("Enrollment Failed!", "Could not record your enrollment. Please try again later. Error: " + error.message);
+                }
+            } else {
+                console.warn("Firebase not fully initialized or user not authenticated. Enrollment not saved to database.");
+                showAlert("Enrollment Info", "Please proceed by filling out the Google Form to complete your enrollment.");
+            }
+
+            // Always open Google From link
+            window.open("https://forms.gle/qhgodavcpUe7PaUi7", "_blank");
+        }
+
+        // Shows the course description modal
+        function showModal() {
+            courseDescriptionModal.classList.remove('hidden', 'modal-exit');
+            courseDescriptionModal.classList.add('modal-enter');
+            setTimeout(() => courseDescriptionModal.classList.add('modal-enter-active'), 10);
+        }
+
+        // Hides the course description modal
+        function hideModal() {
+            courseDescriptionModal.classList.remove('modal-enter-active');
+            courseDescriptionModal.classList.add('modal-exit');
+            setTimeout(() => {
+                courseDescriptionModal.classList.add('hidden');
+                modalDescription.innerHTML = ""; // Use innerHTML for rich text
+                modalError.textContent = "";
+                modalError.classList.add('hidden');
+            }, 300);
+        }
+
+        // Displays the predefined details for "ChatGPT & AI Week"
+        function showChatGPTAIWeekDetails() {
+            modalCourseTitle.textContent = "ChatGPT & AI Week: Unlocking the Future";
+            modalLoadingSpinner.classList.add('hidden'); // Ensure spinner is hidden
+            const predefinedDescription = `
+                <p class="mb-4">🚀 **ChatGPT & AI Week**</p>
+                <p class="mb-4">AI নিয়ে এখনো পুরোটা ক্লিয়ার না? ChatGPT আছে, কিন্তু পড়াশোনায় কাজে লাগাতে পারছো না? তাহলে এই Week একদম তোমার জন্য!</p>
+
+                <p class="mb-4">📱 ChatGPT আছে, কিন্তু পড়াশোনায় কাজে লাগাতে পারছো না?</p>
+                <p class="mb-4">তাহলে এই Week একদম তোমার জন্য!</p>
+
+                <p class="mb-4">🧠 **Week হাইলাইটস:**</p>
+                <ul class="list-disc list-inside text-gray-300 mb-4 pl-4">
+                    <li>📅 মোট ক্লাস: ৬টি | ⏱️ সময়: প্রতিদিন ৩০–৪৫ মিনিট</li>
+                    <li>📍 প্ল্যাটফর্ম: Google Meet</li>
+                    <li>💰 কোর্স ফি: মাত্র ৫০ টাকা!</li>
+                </ul>
+
+                <p class="mb-4">📚 **যা যা শিখবে:**</p>
+                <ol class="list-decimal list-inside text-gray-300 mb-4 pl-4">
+                    <li>AI কী? – সহজ ভাষায় বেসিক ধারণা</li>
+                    <li>AI এর ভবিষ্যৎ – চাকরি, পড়াশোনা ও জীবনে এর প্রভাব</li>
+                    <li>ChatGPT বেসিক ব্যবহার – প্রশ্ন করা, সঠিক রিপ্লাই পাওয়া</li>
+                    <li>পড়াশোনায় ChatGPT – স্মার্ট নোট, সাজেশন, প্রেজেন্টেশন</li>
+                    <li>AI দিয়ে গ্রাফিক ডিজাইন – Canva ও অন্যান্য টুল</li>
+                    <li>কনটেন্ট রাইটিং – আইডিয়া, লেখা, ফেসবুক পোস্ট</li>
+                </ol>
+
+                <ul class="list-disc list-inside text-gray-300 mb-4 pl-4">
+                    <li>🎓 কোর্স শেষে থাকবে ডিজিটাল সার্টিফিকেট</li>
+                    <li>📝 থাকবে একটি ছোট অনলাইন এক্সাম</li>
+                    <li>🏆 এক্সামে টপ করলেই থাকবে স্পেশাল গিফট 🎁</li>
+                </ul>
+                <p class="mb-4">🔥 ক্লাস ৫ থেকে বিশ্ববিদ্যালয় পর্যন্ত – সবাই অংশ নিতে পারবে!</p>
+                <p class="font-semibold text-orange-300">👉 সিট সীমিত – তাই এখনই রেজিস্ট্রেশন করো!</p>
+            `;
+            modalDescription.innerHTML = predefinedDescription;
+            showModal();
+        }
+
+        // Dynamically renders course cards
+        function renderCourses() {
+            coursesGrid.innerHTML = ''; // Clear existing content
+            coursesData.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl';
+                courseCard.innerHTML = `
+                    <div class="course-image-container">
+                        <img src="${course.imageUrl}" alt="${course.title}" class="course-image">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-xl text-white mb-2">${course.title}</h4>
+                        <p class="text-gray-400 text-sm mb-3">${course.shortDesc}</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-purple-400 text-sm font-semibold">${course.level}</span>
+                            <span class="text-green-400 font-bold text-lg">${course.price}</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out view-details-btn" data-course-title="${course.title}">
+                                View Details
+                            </button>
+                            <button class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out enroll-course-btn" data-course='${JSON.stringify(course)}'>
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                coursesGrid.appendChild(courseCard);
+            });
+
+            // Add event listeners to newly created buttons
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const courseTitle = event.target.dataset.courseTitle;
+                    if (courseTitle === "ChatGPT & AI Week") {
+                        showChatGPTAIWeekDetails();
+                    } else {
+                        // For other courses, you might fetch details dynamically or show a generic message
+                        modalCourseTitle.textContent = courseTitle;
+                        modalDescription.textContent = "Detailed description for this course is coming soon! Please check back later.";
+                        modalLoadingSpinner.classList.add('hidden');
+                        showModal();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.enroll-course-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const course = JSON.parse(event.target.dataset.course);
+                    handleEnrollClick(course);
+                });
+            });
+        }
+
+        // Handles click on "Explore Research Programs"
+        async function handleExploreResearch() {
+            console.log("Explore Research Programs button clicked!");
+            if (db && userId && userId !== 'anonymous') {
+                try {
+                    showAlert("Redirecting", "Taking you to our research programs page...");
+                    const researchInterestRef = collection(db, `artifacts/${appId}/users/${userId}/research_interests`);
+                    await addDoc(researchInterestRef, {
+                        timestamp: serverTimestamp(),
+                        userId: userId,
+                        action: "explored_research_programs"
+                    });
+                } catch (error) {
+                    console.error("Error logging research interest to Firestore:", error);
+                }
+            } else {
+                console.warn("Firebase not initialized. Research program interest not saved to database.");
+            }
+            window.open(RESEARCH_PROGRAM_LINK, "_blank");
+        }
+
+        // Handles contact form submission
+        async function handleContactFormSubmit(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            if (!name || !email || !message) {
+                showAlert("Error", "Please fill in all fields.");
+                return;
+            }
+
+            const whatsappMessage = `Hello TechCraft Academy, my name is ${name} (${email}). I have a question: ${message}`;
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+
+            if (db && userId && userId !== 'anonymous') {
+                try {
+                    showAlert("Sending Message", "Preparing your WhatsApp message and saving your inquiry...");
+                    const inquiriesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/inquiries`);
+                    await addDoc(inquiriesCollectionRef, {
+                        name,
+                        email,
+                        message,
+                        timestamp: serverTimestamp(),
+                        userId: userId,
+                        status: "pending"
+                    });
+                    showAlert("Success!", "Your inquiry has been recorded. Redirecting to WhatsApp chat.");
+                    setTimeout(() => window.open(whatsappUrl, "_blank"), 1000); // Redirect after a short delay
+                    contactForm.reset(); // Clear the form
+                } catch (error) {
+                    console.error("Error saving inquiry to Firestore:", error);
+                    showAlert("Error", "Could not save your inquiry. Please try again or contact us directly. Error: " + error.message);
+                }
+            } else {
+                console.warn("Firebase not initialized. Inquiry not saved to database.");
+                showAlert("Sending Message", "Redirecting to WhatsApp chat.");
+                setTimeout(() => window.open(whatsappUrl, "_blank"), 500); // Redirect immediately if no Firebase
+                contactForm.reset(); // Clear the form
+            }
+        }
+
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCourses(); // Render courses on page load
+
+            // Modal event listeners
+            closeModalBtn.addEventListener('click', hideModal);
+            modalCloseBtnBottom.addEventListener('click', hideModal);
+            courseDescriptionModal.addEventListener('click', (e) => {
+                if (e.target === courseDescriptionModal) {
+                    hideModal();
+                }
+            });
+
+            // Alert modal event listeners
+            closeAlertModalBtn.addEventListener('click', hideAlert);
+            alertModalOkBtn.addEventListener('click', hideAlert);
+            alertModal.addEventListener('click', (e) => {
+                if (e.target === alertModal) {
+                    hideAlert();
+                }
+            });
+
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', toggleMobileMenu);
+
+            // Hero section "Enroll Now" button
+            enrollNowHeroBtn.addEventListener('click', () => handleEnrollClick());
+
+            // Explore Research Programs button
+            exploreResearchBtn.addEventListener('click', handleExploreResearch);
+
+            // Contact Form submission
+            contactForm.addEventListener('submit', handleContactFormSubmit);
+        });
+    </script>
+</body>
+</html>

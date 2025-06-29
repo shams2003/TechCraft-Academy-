@@ -343,9 +343,9 @@
                 <p class="text-gray-400 text-md">IT Support Specialist</p>
             </div>
             <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
-                <img src="./Mst Maysha.jpg" alt="Team Member 6" class="small-team-img rounded-full mb-4 border-2 border-sky-500">
-                <h4 class="font-bold text-xl text-white mb-1">Mst Maysha </h4>
-                <p class="text-gray-400 text-md">Tele Sales Representative </p>
+                <img src="./ - Tahsin Fariya Sonam.jpg" alt="Team Member 6" class="small-team-img rounded-full mb-4 border-2 border-sky-500">
+                <h4 class="font-bold text-xl text-white mb-1">TAHSIN FARIYA  </h4>
+                <p class="text-gray-400 text-md">Event Management Head </p>
             </div>
             <div class="team-member-card p-6 bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg flex flex-col items-center text-center">
                 <img src="./ - Aysha Siddika (1).jpg" alt="Team Member 7" class="small-team-img rounded-full mb-4 border-2 border-green-500">
@@ -360,7 +360,132 @@
         </div>
     </section>
 
-    ---
+    <!-- Here's just the HTML code for the "Our Services" section, as requested: -->
+
+    <style>
+        body {
+          font-family: 'Inter', sans-serif;
+        }
+    
+        /* Animations */
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fadeIn 1s ease-out forwards;
+        }
+    
+        @keyframes slideUpFade {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-slide-up-fade {
+          opacity: 0;
+          animation: slideUpFade 0.7s ease-out forwards;
+        }
+    
+        /* Glow on hover */
+        .service-card:hover {
+          box-shadow: 0 0 20px rgba(138, 43, 226, 0.6), 0 0 40px rgba(138, 43, 226, 0.3);
+        }
+    
+        .service-card img {
+          height: 256px; /* h-64 */
+          width: 256px;  /* w-64 */
+          object-fit: cover;
+        }
+    
+        /* Background Motion */
+        @keyframes gradientFlow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+    
+        .bg-gradient-animated {
+          background-image: linear-gradient(270deg, #0d0c1d, #1a1a2e, #3a0ca3);
+          background-size: 300% 300%;
+          animation: gradientFlow 20s ease infinite;
+        }
+      </style>
+    </head>
+    <body class="bg-gray-900 text-white">
+    
+      <section id="services-section" class="px-6 py-16 rounded-b-3xl shadow-xl overflow-hidden bg-gradient-animated">
+        <h3 class="text-3xl font-semibold text-center mb-12 text-purple-300 animate-fade-in">Our Services</h3>
+    
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          
+          <!-- Service 1 -->
+          <div class="bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg p-6 flex flex-col items-center text-center transform transition duration-300 ease-in-out hover:scale-105 service-card animate-slide-up-fade">
+            <img src="./srarives.png" alt="CraftWeb AI" class="rounded-lg mb-4">
+            <h4 class="font-bold text-xl text-white mb-2">CraftWeb AI</h4>
+            <p class="text-gray-400 text-md mb-4">Smart Websites, Built with AI.</p>
+            <div class="flex space-x-4 mt-auto">
+              <a href="https://wa.me/8801797654164?text=I'm interested in AI Consulting" target="_blank" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center">
+                Contact Us
+              </a>
+              <button
+  class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out details-button"
+  data-service-title="CraftWeb AI "
+  data-service-description="আমরা AI প্রযুক্তির সাহায্যে আধুনিক, দ্রুত এবং প্রফেশনাল ওয়েবসাইট তৈরি করে থাকি যা আপনার ব্যবসার অনলাইন উপস্থিতিকে নতুন উচ্চতায় নিয়ে যাবে। ছোট ব্যবসা থেকে বড় প্রতিষ্ঠানের জন্য একদম কাস্টমাইজড ডিজাইন এবং ব্যবহারকারী বান্ধব ফিচারসহ ওয়েবসাইট ডেলিভারি করি। SEO অপ্টিমাইজেশন, রেস্পন্সিভ ডিজাইন, এবং প্রয়োজনীয় হোস্টিং সাপোর্টসহ পুরো প্রক্রিয়াটি আমরা আপনার জন্য সহজ করে দিই।
+
+  "
+>
+  Details
+</button>
+
+            
+
+
+            </div>
+          </div>
+    
+          <!-- Service 2 -->
+          <div class="bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg p-6 flex flex-col items-center text-center transform transition duration-300 ease-in-out hover:scale-105 service-card animate-slide-up-fade" style="animation-delay: 0.2s;">
+            <img src="./s2.png" alt="PagePilot" class="rounded-lg mb-4">
+            <h4 class="font-bold text-xl text-white mb-2">PagePilot</h4>
+            <p class="text-gray-400 text-md mb-4">Launch & Grow Your Brand on Facebook.</p>
+            <div class="flex space-x-4 mt-auto">
+              <a href="https://wa.me/8801797654164?text=I'm interested in Custom Software Development" target="_blank" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center">
+                Contact Us
+              </a>
+              <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out details-button" data-service-title="PagePilot" data-service-description="ফেসবুক পেজ তৈরি ও সেটআপের ক্ষেত্রে PagePilot আপনার পারফেক্ট পার্টনার। আমরা আপনার ব্র্যান্ডের জন্য সম্পূর্ণ প্রফেশনাল পেজ তৈরি করি, যেখানে কাস্টম লোগো, ক্রিয়েটিভ কভার ফটো, আকর্ষণীয় বায়ো এবং কাস্টম কল টু অ্যাকশন বোতামসহ সবকিছু থাকবে। পাশাপাশি মেসেঞ্জার অটোমেশন, রেসপন্সিভ কমেন্ট ম্যানেজমেন্ট ও পেজ রোল কনফিগারেশনসহ আপনার সোশ্যাল মিডিয়া মার্কেটিংকে সহজতর করে তুলি।
+
+              ">
+                Details
+              </button>
+            </div>
+          </div>
+    
+          <!-- Service 3 -->
+          <div class="bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-600 rounded-xl shadow-lg p-6 flex flex-col items-center text-center transform transition duration-300 ease-in-out hover:scale-105 service-card animate-slide-up-fade" style="animation-delay: 0.4s;">
+            <img src="./3rd.png" alt="TechAssist Pro" class="rounded-lg mb-4">
+            <h4 class="font-bold text-xl text-white mb-2">TechAssist Pro</h4>
+            <p class="text-gray-400 text-md mb-4">On-Demand IT Support. Simplified.</p>
+            <div class="flex space-x-4 mt-auto">
+              <a href="https://wa.me/8801797654164?text=I'm interested in Digital Marketing & SEO" target="_blank" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center">
+                Contact Us
+              </a>
+              <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out details-button" data-service-title="Digital Marketing & SEOTechAssist Pro" data-service-description="ফেসবুক পেজ তৈরি ও সেটআপের ক্ষেত্রে PagePilot আপনার পারফেক্ট পার্টনার। আমরা আপনার ব্র্যান্ডের জন্য সম্পূর্ণ প্রফেশনাল পেজ তৈরি করি, যেখানে কাস্টম লোগো, ক্রিয়েটিভ কভার ফটো, আকর্ষণীয় বায়ো এবং কাস্টম কল টু অ্যাকশন বোতামসহ সবকিছু থাকবে। পাশাপাশি মেসেঞ্জার অটোমেশন, রেসপন্সিভ কমেন্ট ম্যানেজমেন্ট ও পেজ রোল কনফিগারেশনসহ আপনার সোশ্যাল মিডিয়া মার্কেটিংকে সহজতর করে তুলি।
+
+              ">
+                Details
+              </button>
+            </div>
+          </div>
+    
+        </div>
+      </section>
+      
+      <!-- [[[[[]]]]]> -->
 
     <section id="why-choose-us-section" class="px-6 py-16 bg-gradient-to-r from-[#0d0c1d] to-[#1a1a2e] rounded-b-3xl shadow-xl">
         <h3 class="text-3xl font-semibold text-center mb-12 text-purple-300">Why Choose Us</h3>
@@ -526,6 +651,106 @@
             </button>
         </div>
     </div>
+-----
+
+
+    ---
+    <script type="module">
+        // --- Course Description Modal Logic (from previous conversations) ---
+        // Ensure you have the corresponding HTML for your modal pop-up in your document.
+        const courseDescriptionModal = document.getElementById('course-description-modal');
+        const modalCourseTitle = document.getElementById('modal-course-title');
+        const modalDescription = document.getElementById('modal-description');
+        const modalLoadingSpinner = document.getElementById('modal-loading-spinner');
+        const modalError = document.getElementById('modal-error');
+        const closeModalBtns = document.querySelectorAll('#close-modal-btn, #modal-close-btn-bottom');
+    
+        function openModal() {
+            if (courseDescriptionModal) {
+                courseDescriptionModal.classList.remove('hidden', 'modal-exit-active');
+                courseDescriptionModal.classList.add('modal-enter');
+                setTimeout(() => {
+                    courseDescriptionModal.classList.remove('modal-enter');
+                    courseDescriptionModal.classList.add('modal-enter-active');
+                }, 10); // Small delay to trigger transition
+            }
+        }
+    
+        function closeModal() {
+            if (courseDescriptionModal) {
+                courseDescriptionModal.classList.remove('modal-enter-active');
+                courseDescriptionModal.classList.add('modal-exit');
+                setTimeout(() => {
+                    courseDescriptionModal.classList.add('hidden');
+                    courseDescriptionModal.classList.remove('modal-exit');
+                }, 300); // Match transition duration
+            }
+        }
+    
+        closeModalBtns.forEach(btn => btn.addEventListener('click', closeModal));
+    
+        // Close modal if clicked outside content area
+        if (courseDescriptionModal) {
+            courseDescriptionModal.addEventListener('click', (e) => {
+                if (e.target === courseDescriptionModal) {
+                    closeModal();
+                }
+            });
+        }
+    
+        // --- Services Section Details Button Logic ---
+        document.querySelectorAll('.details-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const serviceTitle = event.target.dataset.serviceTitle;
+                const serviceDescription = event.target.dataset.serviceDescription;
+    
+                if (modalCourseTitle && modalDescription) {
+                    modalCourseTitle.textContent = serviceTitle;
+                    modalDescription.textContent = serviceDescription;
+                    if (modalLoadingSpinner) modalLoadingSpinner.classList.add('hidden');
+                    if (modalError) modalError.classList.add('hidden');
+                    openModal(); // This function opens the modal
+                } else {
+                    // Fallback or alert if modal elements are not found
+                    alert(`Details for ${serviceTitle}:\n\n${serviceDescription}`);
+                }
+            });
+        });
+    
+        // --- Animations for "Our Services" section on scroll ---
+        const servicesSection = document.getElementById('services-section');
+        const serviceCards = servicesSection ? servicesSection.querySelectorAll('.service-card') : [];
+        const serviceTitle = servicesSection ? servicesSection.querySelector('h3') : null;
+    
+        const observerOptions = {
+            root: null, // relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the section is visible
+        };
+    
+        const serviceSectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Animate title
+                    if (serviceTitle) {
+                        serviceTitle.classList.add('animate-fade-in');
+                    }
+    
+                    // Animate cards with a slight delay
+                    serviceCards.forEach((card, index) => {
+                        card.style.animationDelay = `${index * 0.15}s`; // Stagger delay
+                        card.classList.add('animate-slide-up-fade');
+                    });
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+    
+        // Start observing the section if it exists
+        if (servicesSection) {
+            serviceSectionObserver.observe(servicesSection);
+        }
+    </script>
 
     <script type="module">
         // Firebase imports (Placeholder - will not work without proper Firebase config)
@@ -589,17 +814,17 @@
                 imageUrl: "./492653536_122100483086851876_7672025409578758590_n.jpg" // Image path for 1024x1024 (hypothetical)
             },
             {
-                title: "Data Science Fundamentals",
-                shortDesc: "Learn the core concepts of data science, including data analysis, visualization, and basic machine learning.",
-                level: "Beginner",
-                price: "BDT 2500",
-                imageUrl: "./unnamed (1).png" // Image path for 1024x1024 (hypothetical)
+                title: "Basics of cyber security",
+                shortDesc: "Learn the fundamentals of cyber security, including online safety, password protection, phishing, and data privacy..",
+                level: "All Students",
+                price: "BDT 399",
+                imageUrl: "./unnamed.png" // Image path for 1024x1024 (hypothetical)
             },
             {
-                title: "Machine Learning with Python",
-                shortDesc: "Dive deep into machine learning algorithms and implement them using Python and popular libraries.",
-                level: "Intermediate",
-                price: "BDT 4000",
+                title: "Basics of Computer",
+                shortDesc: "Get introduced to the essential concepts of computers, including hardware, software, typing, and basic operations.",
+                level: "All Students",
+                price: "BDT 999",
                 imageUrl: "./computer.png" // Image path for 1024x1024 (hypothetical)
             },
             
@@ -676,11 +901,11 @@
                 }
             } else {
                 console.warn("Firebase not fully initialized or user not authenticated. Enrollment not saved to database.");
-                showAlert("Enrollment Info", "Enrollment functionality would typically save to a database here. Proceeding to Facebook.");
+                showAlert("Enrollment Info", "Enrollment functionality would typically save to a database here. Proceeding to Google From.");
             }
 
             // Always open Facebook link
-            window.open("https://www.facebook.com/profile.php?id=61575556296733", "_blank");
+            window.open("https://docs.google.com/forms/d/e/1FAIpQLSfIcZuR2tEE_9Ka16-ZZ8aSUe2AHy8DS4ttL-y0Q3HRsPnxcQ/viewform?usp=header", "_blank");
         }
 
         // Shows the course description modal
